@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Register</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role" required onchange="toggleStudentFields()">
+                                <option value="">Select Role</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="student">Student</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Student-specific fields -->
+                        <div id="studentFields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="roll_number" class="form-label">Roll Number</label>
+                                <input type="text" class="form-control" id="roll_number" name="roll_number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="department" class="form-label">Department</label>
+                                <input type="text" class="form-control" id="department" name="department">
+                            </div>
+                            <div class="mb-3">
+                                <label for="semester" class="form-label">Semester</label>
+                                <input type="number" class="form-control" id="semester" name="semester" min="1" max="8">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Already have an account? Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleStudentFields() {
+    const role = document.getElementById('role').value;
+    const studentFields = document.getElementById('studentFields');
+    const studentInputs = studentFields.getElementsByTagName('input');
+    
+    if (role === 'student') {
+        studentFields.style.display = 'block';
+        // Make student fields required
+        for (let input of studentInputs) {
+            input.required = true;
+        }
+    } else {
+        studentFields.style.display = 'none';
+        // Remove required from student fields
+        for (let input of studentInputs) {
+            input.required = false;
+        }
+    }
+}
+</script>
+{% endblock %} 

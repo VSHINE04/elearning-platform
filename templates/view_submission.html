@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>View Submission</h2>
+                <a href="{{ url_for('course_assignments', course_id=course._id) }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Assignments
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Submission Details -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-file-earmark-text"></i> Assignment Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Course</h6>
+                            <p>{{ course.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Assignment</h6>
+                            <p>{{ assignment.title }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Due Date</h6>
+                            <p>{{ assignment.due_date.strftime('%Y-%m-%d') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Submitted On</h6>
+                            <p>{{ submission.submitted_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-muted">Description</h6>
+                            <p>{{ assignment.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student's Submission -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-person"></i> Student's Submission
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Student Name</h6>
+                            <p>{{ student.first_name }} {{ student.last_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Roll Number</h6>
+                            <p>{{ student.roll_number }}</p>
+                        </div>
+                    </div>
+                    {% if submission.comments %}
+                    <div class="mb-3">
+                        <h6 class="text-muted">Comments</h6>
+                        <p>{{ submission.comments }}</p>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h6 class="text-muted">Submitted File</h6>
+                        <a href="{{ submission.file_url }}" class="btn btn-primary" target="_blank">
+                            <i class="bi bi-download"></i> Download Submission
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Submission -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil-square"></i> Grade Submission
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('grade_submission', submission_id=submission._id) }}">
+                        <div class="mb-3">
+                            <label for="score" class="form-label">Score (0-100)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="score" name="score" 
+                                       min="0" max="100" step="0.1" required
+                                       value="{{ grade.score if grade else '' }}">
+                                <span class="input-group-text">/100</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedback" class="form-label">Feedback</label>
+                            <textarea class="form-control" id="feedback" name="feedback" 
+                                      rows="4">{{ grade.feedback if grade else '' }}</textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Save Grade
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

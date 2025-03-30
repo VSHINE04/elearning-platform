@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron text-center py-5">
+    {% if session.get('user_id') %}
+        <h1 class="display-4 mb-4">Welcome back, {{ session.get('email') }}!</h1>
+        <p class="lead mb-4">
+            {% if session.get('role') == 'teacher' %}
+                Manage your courses and assignments
+            {% else %}
+                Access your enrolled courses and assignments
+            {% endif %}
+        </p>
+        <hr class="my-4">
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a class="btn btn-primary btn-lg px-4 gap-3" href="{{ url_for('list_courses') }}" role="button">
+                <i class="bi bi-book"></i> View Courses
+            </a>
+            {% if session.get('role') == 'teacher' %}
+                <a class="btn btn-success btn-lg px-4 gap-3" href="{{ url_for('add_course') }}" role="button">
+                    <i class="bi bi-plus-circle"></i> Add Course
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <h1 class="display-4 mb-4">Welcome to eLearning System</h1>
+        <p class="lead mb-4">Manage your courses, assignments, and grades all in one place.</p>
+        <hr class="my-4">
+        <p class="mb-4">Get started by creating an account or logging in.</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a class="btn btn-primary btn-lg px-4 gap-3" href="{{ url_for('login') }}" role="button">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+            <a class="btn btn-success btn-lg px-4 gap-3" href="{{ url_for('register') }}" role="button">
+                <i class="bi bi-person-plus"></i> Register
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% if not session.get('user_id') %}
+<div class="row g-4 mt-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-mortarboard display-4 text-primary mb-3"></i>
+                <h3 class="card-title">For Teachers</h3>
+                <p class="card-text">Create and manage courses, assignments, and grade student submissions.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-person display-4 text-success mb-3"></i>
+                <h3 class="card-title">For Students</h3>
+                <p class="card-text">Enroll in courses, submit assignments, and track your progress.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-graph-up display-4 text-info mb-3"></i>
+                <h3 class="card-title">Track Progress</h3>
+                <p class="card-text">Monitor your grades and track your learning journey.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %} 
